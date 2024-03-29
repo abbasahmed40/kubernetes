@@ -6,13 +6,24 @@ echo "If you do not have oppenssl 1.1.1 which is required go to 'https://gist.gi
 
 echo "Creating Registry folder at /registry "
 sudo mkdir -p /registry && cd "$_"
+
+#creating certs dir inside registry
+# mkdir certs
+
 echo "Creating OpenSSL Certificats using OpenSSL 1.1.1"
 openssl req -x509 -newkey rsa:4096 -days 365 -nodes -sha256 -keyout certs/tls.key -out certs/tls.crt -subj "/CN=docker-registry" -addext "subjectAltName = DNS:docker-registry"
+
 
 echo "Install Htpasswd for Centos"
 sudo yum install httpd-tools -y
 echo "Creating Folder Auth at /registry"
 sudo mkdir auth
+
+#Note for ubuntu--- 
+#-sudo apt-get update
+#-sudo apt-get install apache2-utils
+#-htpasswd -Bbn myuser mypasswd | sudo tee /auth/htpasswd
+
 #sudo docker run --rm --entrypoint htpasswd registry:2.6.2 -Bbn myuser mypasswd > auth/htpasswd2
 #sudo docker run --entrypoint htpasswd httpd:2 -Bbn myuser mypasswd > auth/htpasswd
 htpasswd -Bbn myuser  mypasswd  > /registry/auth/htpasswd
