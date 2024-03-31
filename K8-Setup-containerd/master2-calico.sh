@@ -60,18 +60,15 @@ echo 'export KUBECONFIG=$HOME/admin.conf' >> $HOME/.bashrc
 #Fix the Error – The connection to the server localhost:8080 was refused
 export KUBECONFIG=/etc/kubernetes/admin.conf
 
+# if there is still error check the permission
+# sudo chmod 644 /etc/kubernetes/admin.conf
 echo "Checking Status of Nodes"
 kubectl get nodes
 
 echo "Installing Calico Network"
-kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml 
+curl https://raw.githubusercontent.com/projectcalico/calico/v3.26.4/manifests/calico.yaml -O
+kubectl apply -f calico.yaml
 
-#kubectl create -f https://docs.projectcalico.org/manifests/custom-resources.yaml
-#echo "Installing Calico Cli ETCD"
-#kubectl apply -f https://docs.projectcalico.org/manifests/calicoctl-etcd.yaml
-
-echo "Checking Status of Nodes After Applying Calico Network"
-sudo kubectl get nodes
 
 echo"Setting Alias k for kubectl"
 alias k=kubectl
