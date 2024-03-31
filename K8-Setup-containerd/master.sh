@@ -5,20 +5,21 @@ sudo yum -y update
 
 
 echo "Installing Kubelet, Kubeadm and Kubectl......"
+# update: switching to another repo for ref please visit 
+# https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/change-package-repository/
 cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
-baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch
+baseurl=https://pkgs.k8s.io/core:/stable:/v1.28/rpm/
 enabled=1
 gpgcheck=1
-gpgkey=https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-exclude=kubelet kubeadm kubectl
-EOF
+gpgkey=https://pkgs.k8s.io/core:/stable:/v1.28/rpm/repodata/repomd.xml.key
+exclude=kubelet kubeadm kubectl cri-tools kubernetes-cni
 
-#gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 
-#sudo yum -y install epel-release vim git curl wget kubelet kubeadm kubectl --disableexcludes=kubernetes
-sudo yum -y install epel-release vim git curl wget kubelet-1.26.3 kubeadm-1.26.3-0 kubectl-1.26.3 --disableexcludes=kubernetes
+
+sudo yum -y install epel-release vim git curl wget kubelet kubeadm kubectl --disableexcludes=kubernetes
+
 
 echo "Your Kubeadm version is......"
 sudo kubeadm version
